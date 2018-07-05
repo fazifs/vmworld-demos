@@ -3,30 +3,30 @@
   gather_facts: False
   vars:
     guest_name: newvm001
-    vmware_template: template_el7
+    vmware_template: rhel6tmpl
   tasks:
 
     - name: create the instance
       vsphere_guest:
         validate_certs: no
         vcenter_hostname: "{{ lookup('env', 'VMWARE_HOST') }}"
-        username: "{{ lookup('env', 'VMWARE_USER') }}"
-        password: "{{ lookup('env', 'VMWARE_PASSWORD') }}"
+       #username: "{{ lookup('env', 'VMWARE_USER') }}"
+       #password: "{{ lookup('env', 'VMWARE_PASSWORD') }}"
         guest: "{{ guest_name }}"
         from_template: yes
         template_src: "{{ vmware_template }}"
         vm_extra_config:
-          folder: testvms
+          folder: /
         esxi:
-          datacenter: datacenter1
-          hostname: 172.16.66.128
+          datacenter: DC01
+         # hostname: 172.16.66.128
 
     - name: loop until the guest has an IP address
       vsphere_guest:
         validate_certs: no
         vcenter_hostname: "{{ lookup('env', 'VMWARE_HOST') }}"
-        username: "{{ lookup('env', 'VMWARE_USER') }}"
-        password: "{{ lookup('env', 'VMWARE_PASSWORD') }}"
+        #username: "{{ lookup('env', 'VMWARE_USER') }}"
+        #password: "{{ lookup('env', 'VMWARE_PASSWORD') }}"
         guest: "{{ guest_name }}"
         vmware_guest_facts: yes
       register: instance
